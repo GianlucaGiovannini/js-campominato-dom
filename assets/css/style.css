@@ -59,6 +59,13 @@ input {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+h2 {
+    font-size: 3rem;
+    position: absolute;
+    top: 85%;
 }
 
 .celle {

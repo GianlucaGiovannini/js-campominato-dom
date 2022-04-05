@@ -56,7 +56,7 @@ function activateCell(selector, class_active, class_bomb, num_celle) {
         const cella = celle[i];
         cella.addEventListener('click', function() {
 
-            if (bombe.includes(parseInt(this.textContent))) {
+            if (bombe.includes(parseInt(this.innerHTML))) {
                 this.classList.add(class_bomb);
 
                 for (let i = 0; i < celle.length; i++) {
