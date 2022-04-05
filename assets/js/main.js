@@ -40,7 +40,6 @@ function generateGrid(num_celle, class_name) {
 
 /* se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba
 la cella si colora di rosso e la partita termina, */
-let randomBomb = [];
 
 /**
  * ## Attivatore celle al click
@@ -53,27 +52,40 @@ function activateCell(selector, class_active, class_bomb, num_celle) {
     const bombe = generateBomb(num_celle)
     console.log(bombe)
 
-    for (let i = 0; i < celle.length; i++) {
+    for (let i = 0; i < celle.length - 16; i++) {
         const cella = celle[i];
         cella.addEventListener('click', function() {
 
-            if (this == bombe) {
-                this.classList.add(class_active);
-                console.log("ciao")
-            } else {
+            if (bombe.includes(parseInt(this.textContent))) {
                 this.classList.add(class_bomb);
-                console.log("abbalabba")
+
+                for (let i = 0; i < num_celle; i++) {
+                    let bombeColor = document.querySelectorAll(selector)
+                    console.log(bombeColor)
+                    if (bombeColor.includes(parseInt(esplose.textContent))) {
+                        this[i].classList.add(class_bomb);
+
+                    } else {
+                        this[i].classList.add(class_active);
+                    }
+                }
+
+            } else {
+
+                this.classList.add(class_active);
+
             }
         })
     }
 }
+
 
 function getRandomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function generateBomb(num_celle) {
-
+    let randomBomb = [];
     while (randomBomb.length !== 16) {
         const randomNumber = getRandomInteger(1, num_celle)
         if (!randomBomb.includes(randomNumber)) {
