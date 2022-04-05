@@ -1,45 +1,84 @@
+// selezione bottone 
 let playElement = document.getElementById("play");
-
-playElement.addEventListener("click", difficultLevel)
+// Evento al click del bottone per far partire le funzioni che generano la griglia e l'attivatore delle celle al click
+playElement.addEventListener("click", difficultLevel);
 
 function difficultLevel() {
-    let valore = document.getElementById("difficult").value;
-    console.log(valore);
-    if (valore === "facile") {
-        generateGrid('.celle', 'div', 'cella_facile', 100);
-        activateCell('.cella_facile', 'active');
-    } else if (valore === "media") {
-        generateGrid('.celle', 'div', 'cella_media', 81);
-        activateCell('.cella_media', 'active');
+
+    let valueInputElement = document.getElementById("difficult").value;
+
+    if (valueInputElement === "facile") {
+        generateGrid(100, "cella_facile")
+        activateCell(".cella_facile", "active", "active_bomb", 100)
+
+    } else if (valueInputElement === "media") {
+        generateGrid(81, "cella_media")
+        activateCell(".cella_media", "active", "active_bomb", 81)
+
     } else {
-        generateGrid('.celle', 'div', 'cella_difficile', 49);
-        activateCell('.cella_difficile', 'active');
+        generateGrid(49, "cella_difficile")
+        activateCell(".cella_difficile", "active", "active_bomb", 49)
+
     }
 }
 
-function generateGrid(selector, element_name, class_name, number_of_cells) {
-    const cellsElement = document.querySelector(selector)
-    cellsElement.innerHTML = "";
-    for (let i = 1; i <= number_of_cells; i++) {
-        const cell = document.createElement(element_name)
-        cell.classList.add(class_name)
-        cellsElement.append(cell)
-        cell.innerHTML = `<span>${i}</span>`;
+/**
+ * ## Generatore di celle automatico
+ * @param {string} num_celle numero di celle che si vuole creare
+ * @param {string} class_name nome classe da mettere nel tag interno all'elemento che si crea
+ */
+function generateGrid(num_celle, class_name) {
+    let celleElement = document.querySelector(".celle")
+    celleElement.innerHTML = "";
+
+    for (let i = 1; i <= num_celle; i++) {
+        let cellaContent = `<div class="${class_name}">${i}</div>`
+
+        celleElement.insertAdjacentHTML("beforeend", cellaContent);
     }
 }
 
-function selectCells(selector) {
-    const cells = document.querySelectorAll(selector)
-    return cells
-}
+/* se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba
+la cella si colora di rosso e la partita termina, */
+let randomBomb = [];
 
-function activateCell(selector, active_class) {
-    const cells = selectCells(selector)
+/**
+ * ## Attivatore celle al click
+ * @param {string} selector nome classe cella da attivare al click
+ * @param {string} class_active nome classe per l'attivazione al click
+ */
+function activateCell(selector, class_active, class_bomb, num_celle) {
+    const celle = document.querySelectorAll(selector)
 
-    for (let i = 0; i < cells.length; i++) {
-        const cell = cells[i];
-        cell.addEventListener('click', function() {
-            this.classList.toggle(active_class);
+    const bombe = generateBomb(num_celle)
+    console.log(bombe)
+
+    for (let i = 0; i < celle.length; i++) {
+        const cella = celle[i];
+        cella.addEventListener('click', function() {
+
+            if (this == bombe) {
+                this.classList.add(class_active);
+                console.log("ciao")
+            } else {
+                this.classList.add(class_bomb);
+                console.log("abbalabba")
+            }
         })
     }
+}
+
+function getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function generateBomb(num_celle) {
+
+    while (randomBomb.length !== 16) {
+        const randomNumber = getRandomInteger(1, num_celle)
+        if (!randomBomb.includes(randomNumber)) {
+            randomBomb.push(randomNumber)
+        }
+    }
+    return randomBomb;
 }
