@@ -52,26 +52,20 @@ function activateCell(selector, class_active, class_bomb, num_celle) {
     const bombe = generateBomb(num_celle)
     console.log(bombe)
 
-    for (let i = 0; i < celle.length - 16; i++) {
+    for (let i = 0; i < celle.length; i++) {
         const cella = celle[i];
         cella.addEventListener('click', function() {
 
             if (bombe.includes(parseInt(this.textContent))) {
                 this.classList.add(class_bomb);
 
-                for (let i = 0; i < num_celle; i++) {
-                    let bombeColor = document.querySelectorAll(selector)
-                    console.log(bombeColor)
-                    if (bombeColor.includes(parseInt(esplose.textContent))) {
-                        this[i].classList.add(class_bomb);
-
-                    } else {
-                        this[i].classList.add(class_active);
+                for (let i = 0; i < celle.length; i++) {
+                    let cell = celle[i].textContent
+                    if (bombe.includes(parseInt(cell))) {
+                        celle[i].classList.add(class_bomb);
                     }
                 }
-
             } else {
-
                 this.classList.add(class_active);
 
             }
