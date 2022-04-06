@@ -41,8 +41,6 @@ function generateGrid(num_celle, class_name) {
 /* se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba
 la cella si colora di rosso e la partita termina, */
 
-
-
 /**
  * ## Attivatore celle al click
  * @param {string} selector nome classe cella da attivare al click
@@ -55,10 +53,27 @@ function activateCell(selector, class_active, class_bomb, num_celle) {
     console.log(bombe)
 
     for (let i = 0; i < celle.length; i++) {
-        let cella = celle[i];
+        const cella = celle[i];
 
-        cella.addEventListener('click', checkCell.bind(cella, selector, bombe, num_celle))
+        cella.addEventListener('click', function() {
 
+            let result = document.querySelector(".risultato")
+
+            if (bombe.includes(parseInt(this.innerHTML))) {
+                this.classList.add(class_bomb);
+
+                for (let i = 0; i < celle.length; i++) {
+                    let cell = celle[i].textContent
+                    result.innerHTML = "Hai perso"
+                    if (bombe.includes(parseInt(cell))) {
+                        celle[i].classList.add(class_bomb);
+                    }
+                }
+            } else {
+                this.classList.add(class_active);
+
+            }
+        })
     }
 }
 
@@ -76,37 +91,4 @@ function generateBomb(num_celle) {
         }
     }
     return randomBomb;
-}
-
-function checkCell(selector, bombe) {
-
-    let result = document.querySelector(".risultato")
-    const celle = document.querySelectorAll(selector)
-    const contatoreBombe = []
-    const contatoreNonBombe = []
-    if (bombe.includes(parseInt(this.innerHTML))) {
-
-        for (let i = 0; i < celle.length; i++) {
-            let cell = celle[i].textContent
-            result.innerHTML = "Hai perso"
-            if (bombe.includes(parseInt(cell))) {
-                celle[i].classList.add(class_bomb);
-                contatoreBombe.push(celle[i])
-                endGame()
-            }
-        }
-    } else {
-        celle[i].classList.add(class_active);
-        contatoreNonBombe.push(celle[i])
-    }
-}
-
-function endGame(num_celle) {
-
-    if (contatoreBombe.lenght == 16) {
-        celle[i].removeEventListener('click', checkCell)
-    } else if (contatoreNonBombe == num_celle - 16) {
-        result.innerHTML = "Hai vinto"
-        celle[i].removeEventListener('click', checkCell)
-    }
 }
