@@ -57,7 +57,7 @@ function activateCell(selector, class_active, class_bomb, num_celle) {
     for (let i = 0; i < celle.length; i++) {
         let cella = celle[i];
 
-        cella.addEventListener('click', checkCell.bind(cella, selector, bombe))
+        cella.addEventListener('click', checkCell.bind(cella, selector, bombe, num_celle))
 
     }
 }
@@ -82,7 +82,8 @@ function checkCell(selector, bombe) {
 
     let result = document.querySelector(".risultato")
     const celle = document.querySelectorAll(selector)
-
+    const contatoreBombe = []
+    const contatoreNonBombe = []
     if (bombe.includes(parseInt(this.innerHTML))) {
 
         for (let i = 0; i < celle.length; i++) {
@@ -90,11 +91,22 @@ function checkCell(selector, bombe) {
             result.innerHTML = "Hai perso"
             if (bombe.includes(parseInt(cell))) {
                 celle[i].classList.add(class_bomb);
-                celle[i].removeEventListener('click', checkCell)
+                contatoreBombe.push(celle[i])
+                endGame()
             }
         }
     } else {
         celle[i].classList.add(class_active);
+        contatoreNonBombe.push(celle[i])
+    }
+}
 
+function endGame(num_celle) {
+
+    if (contatoreBombe.lenght == 16) {
+        celle[i].removeEventListener('click', checkCell)
+    } else if (contatoreNonBombe == num_celle - 16) {
+        result.innerHTML = "Hai vinto"
+        celle[i].removeEventListener('click', checkCell)
     }
 }
